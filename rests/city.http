@@ -1,0 +1,37 @@
+###
+GET  http://localhost:3000/api/city/getall?start=0&limit=&orderby=
+# Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjU2LCJpYXQiOjE2NjkxMTMyNjIsImV4cCI6MTY2OTE5OTY2Mn0.jo3ffUcMoZqtiei5deBoo197l0YegnZAjCpujf5tT8M
+
+###
+GET  http://localhost:3000/api/city/getbyid/1
+Content-Type: 'application/json'
+
+###
+POST http://localhost:3000/api/city/create
+Content-Type: application/json
+
+{   
+    "name":"",
+    "publish": "" ,
+    "sort": ""
+}
+
+###
+PUT http://localhost:3000/api/city/update/3
+Content-Type: application/json
+
+{
+    "name":"",
+    "publish": "",
+    "sort": ""
+}
+
+###
+PUT http://localhost:3000/api/city/update-publish/1
+Content-Type: application/json
+
+{
+    "publish": "1"
+}
+###
+DELETE http://localhost:3000/api/city/delete/1

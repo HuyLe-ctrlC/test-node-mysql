@@ -1,0 +1,65 @@
+//DISTRICTS ---------------------------------------------------------------------------------------------------------------------------------
+//get all data
+GET http://localhost:3000/api/districts/getall?orderby=desc&search=gcd&limit=
+
+###
+//tìm kiếm code, name theo keyword
+GET http://localhost:3000/api/districts/getall?keyword=CB
+
+
+###
+//tìm kiếm quận, huyện theo cityID
+GET http://localhost:3000/api/districts/getalls?cityID=2
+
+###
+//Create data
+POST http://localhost:3000/api/districts/create
+Content-Type: application/json
+
+{
+     "publish": "1",
+     "name": "Go Cong Tay1",
+     "cityID": 1,
+     "code": "GCTT12"
+}
+
+###
+//select data by id
+GET http://localhost:3000/api/districts/getbyid/50
+
+
+###
+//Update data
+PUT http://localhost:3000/api/districts/update/89
+Content-Type: application/json
+
+{
+     "code": "GCTT1",
+     "name": "Thị Xã Cai Lậy",
+     "cityID": "23",
+     "publish": "0",
+     "sort": "1"
+}
+
+###
+//Update-publish data
+PUT http://localhost:3000/api/districts/update-publish/75
+Content-Type: application/json
+
+{
+     "publish": "ádf"
+}
+
+###
+//Update-publish data
+PUT http://localhost:3000/api/districts/update-sort/74
+Content-Type: application/json
+
+{
+     "sort": ""
+}
+
+###
+DELETE http://localhost:3000/api/districts/delete/4
+
+###

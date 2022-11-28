@@ -1,0 +1,49 @@
+//local-sales
+
+###
+GET  http://localhost:3000/api/local-sales/getall?orderby=desc&keyword=đ&limit=&start=
+Content-Type: application/json
+
+###
+GET  http://localhost:3000/api/local-sales/getbyid/1
+Content-Type: application/json
+
+###
+POST   http://localhost:3000/api/local-sales/create
+Content-Type: application/json
+
+{   
+    "code":"sdafgdsd",
+    "name":"duy khuong",
+    "publish":"1",
+    "sort": "2"
+}
+
+###
+PUT    http://localhost:3000/api/local-sales/update/35345
+Content-Type: application/json
+
+{    "code":"sdafgdsd",
+    "name":"đá",
+    "publish":"1",
+    "sort": "2",
+    "updated_at":""
+}
+
+###
+PUT    http://localhost:3000/api/local-sales/update-publish/1
+Content-Type: application/json
+
+{
+    "publish": ""
+}
+
+###
+PUT    http://localhost:3000/api/local-sales/update-sort/4
+Content-Type: application/json
+
+
+
+###
+DELETE     http://localhost:3000/api/local-sales/delete/2
+ 

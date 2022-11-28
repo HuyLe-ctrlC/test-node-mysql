@@ -1,0 +1,54 @@
+//conditions
+
+###
+GET  http://localhost:3000/api/conditions/getall?orderby=desc&search=&limit=2
+Content-Type: application/json
+
+###
+GET  http://localhost:3000/api/conditions/getbyid/9
+Content-Type: application/json
+
+###
+POST   http://localhost:3000/api/conditions/create
+Content-Type: application/json
+
+{   
+    "code":"dfgdgvfdsvdsf",
+    "name":"thi",
+    "color_text":"red",
+    "color_bg":"white",
+    "publish":"1",
+    "sort": "2",
+}
+
+###
+PUT    http://localhost:3000/api/conditions/update/16
+Content-Type: application/json
+
+{
+    "code":"sadfdsfsffd",
+    "name":"thi",
+    "publish":"1",
+    "color_text":"black",
+    "color_bg":"pink",
+    "sort": "2",
+    "updated_at":""
+}
+
+###
+PUT    http://localhost:3000/api/conditions/update-publish/2153621
+Content-Type: application/json
+
+{
+    "publish": ""
+}
+
+###
+PUT    http://localhost:3000/api/conditions/update-sort/16
+Content-Type: application/json
+
+
+
+###
+DELETE     http://localhost:3000/api/conditions/delete/16
+

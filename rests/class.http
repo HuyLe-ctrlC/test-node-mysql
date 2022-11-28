@@ -1,0 +1,53 @@
+//class
+
+###
+GET  http://localhost:3000/api/class/getall?orderby=desc&search=khuong&start=&limit=10
+Content-Type: application/json
+
+###
+GET  http://localhost:3000/api/class/getbyid/1
+Content-Type: application/json
+
+###
+POST   http://localhost:3000/api/class/create
+Content-Type: application/json
+
+{    
+     "name": "duy khuong",
+      "balance_ale_min": 1,
+      "balance_ale_max": 2,
+      "discount": 3,
+      "sale_status": 0,
+      "publish": 1,
+     "created_at":""
+}
+ 
+###
+PUT    http://localhost:3000/api/class/update/18
+Content-Type: application/json
+
+{   
+    "name": "khuong",
+      "balance_ale_min": 1,
+      "balance_ale_max": 2,
+      "discount": 3,
+      "sale_status": 0,
+      "publish": 1,
+    "updated_at":""
+     
+  
+}
+
+###
+PUT    http://localhost:3000/api/class/update-publish/1
+Content-Type: application/json
+
+{
+    "publish": ""
+}
+
+
+
+###
+DELETE     http://localhost:3000/api/class/delete/17
+

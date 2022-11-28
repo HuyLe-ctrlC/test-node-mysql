@@ -1,0 +1,53 @@
+//farms
+
+###
+GET  http://localhost:3000/api/farms/getall
+Content-Type: application/json
+
+###
+GET  http://localhost:3000/api/farms/getbyid/5
+Content-Type: application/json
+
+###
+POST   http://localhost:3000/api/farms/create
+Content-Type: application/json
+
+{  "code":"sfasfdgfghbgdfdfsh54654",
+    "name":"thi",
+    "phone":"12345689",
+    "cityID":"19",
+    "districtID":"45",  
+    "wardID":"78",
+    "address":"Tien Giang",
+    "publish":"1",
+    "sort": "2"
+
+}
+ 
+###
+PUT    http://localhost:3000/api/farms/update/21
+Content-Type: application/json
+
+{   "code":"sfasfdgfghbgdfdfsh54654",
+    "name":"huy",
+    "phone":"123456",
+    "cityID":"19",
+    "districtID":"45",
+    "wardID":"78",
+    "address":"Tien Giang",
+    "publish":"1",
+    "sort": "2"
+}
+
+###
+PUT    http://localhost:3000/api/farms/update-publish/21
+Content-Type: application/json
+
+{
+    "publish": ""
+}
+
+
+###
+DELETE     http://localhost:3000/api/farms/delete/20
+

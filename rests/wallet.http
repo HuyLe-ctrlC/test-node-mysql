@@ -1,0 +1,41 @@
+GET  http://localhost:3000/api/wallet/getall?orderby=&keyword=sf&start=2&limit=2
+Content-Type: 'application/json'
+###
+GET  http://localhost:3000/api/wallet/getbyid/454
+Content-Type: application/json
+
+###
+POST   http://localhost:3000/api/wallet/create
+Content-Type: application/json
+
+{
+    "name":"khuong",
+    "publish":"1",
+    "sort": "2"
+}
+
+###
+PUT    http://localhost:3000/api/wallet/update/gffhgfhdfggdfgrtrh
+Content-Type: application/json
+
+{
+    "name":"khuong",
+    "publish":"1",
+    "sort": "2",
+    "updated-at":""
+}
+
+###
+PUT    http://localhost:3000/api/wallet/update-publish/3423
+Content-Type: application/json
+
+{
+    "publish": "1"
+}
+
+###
+PUT    http://localhost:3000/api/wallet/update-sort/4
+Content-Type: application/json
+
+###
+DELETE     http://localhost:3000/api/wallet/delete/4

@@ -47,8 +47,30 @@ app.use(
 );
 
 // routes list
-app.get('/', (req, res) => {
-    res.send('hello wordld');
-});
+require('./app/routes/admins.route')(app);
+require('./app/routes/auth.route')(app);
+// app.use(jwtMiddleware.isAuth); // check login
+require('./app/routes/role.route')(app);
+require('./app/routes/user.route')(app);
+require('./app/routes/city.route')(app);
+require('./app/routes/districts.route')(app);
+require('./app/routes/wards.route')(app);
+require('./app/routes/wallet.route')(app);
+require('./app/routes/bank.route')(app);
+require('./app/routes/productCates.route')(app);
+require('./app/routes/localSales.route')(app);
+require('./app/routes/cowGroups.route')(app);
+require('./app/routes/cowBreeds.route')(app);
+require('./app/routes/conditions.route')(app);
+require('./app/routes/wges.route')(app);
+require('./app/routes/awgs.route')(app);
+require('./app/routes/products.route')(app);
+require('./app/routes/farms.route')(app);
+require('./app/routes/levels.route')(app);
+require('./app/routes/class.route')(app);
+require('./app/routes/weight.route')(app);
+require('./app/routes/wgs.route')(app);
+require('./app/routes/config.route')(app);
+
 server.listen(port_name);
 console.log('server listen port ' + port_name);

@@ -1,0 +1,54 @@
+//products
+
+###
+GET  http://localhost:3000/api/products/getall?orderby=desc&keyword=duy&limit=&start=
+Content-Type: application/json
+
+###
+GET  http://localhost:3000/api/products/getbyid/28
+Content-Type: application/json
+
+###
+POST  http://localhost:3000/api/products/create
+Content-Type: application/json
+
+{   
+    
+    "code":"sfasfdgbgdfd54654",
+    "name":"thi",
+    "image":"",
+    "price":"19.8",
+    "publish":"1",
+    "sort": "2"
+}
+
+###
+PUT    http://localhost:3000/api/products/update/234
+Content-Type: application/json
+
+{  
+    "code":"sfasfdgbgdfd54654",
+    "name":"thi",
+    "image":"",
+    "price":"19.8",
+    "publish":"1",
+    "sort": "2"
+}
+
+###
+PUT    http://localhost:3000/api/products/update-publish/28
+Content-Type: application/json
+
+{
+    "publish": "1"
+}
+
+###
+PUT    http://localhost:3000/api/products/update-sort/28
+Content-Type: application/json
+
+
+
+###
+DELETE     http://localhost:3000/api/products/delete/28
+

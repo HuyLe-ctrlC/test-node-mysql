@@ -1,0 +1,48 @@
+//cow-groups
+
+###
+GET  http://localhost:3000/api/cow-groups/getall?orderby=desc&search=&limit=10
+Content-Type: application/json
+
+###
+GET  http://localhost:3000/api/cow-groups/getbyid/1
+Content-Type: application/json
+
+###
+POST   http://localhost:3000/api/cow-groups/create
+Content-Type: application/json
+
+{   
+    "code":"fsdasdg",
+    "name":"duy khuong",
+    "publish":"1",
+    "sort": "2"
+}
+
+###
+PUT    http://localhost:3000/api/cow-groups/update/33
+Content-Type: application/json
+
+{   "code":"fsdasdg",
+    "name":"zxvsd",
+    "publish":"1",
+    "sort": "2",
+    "updated_at":""
+}
+
+###
+PUT    http://localhost:3000/api/cow-groups/update-publish/1
+Content-Type: application/json
+
+{
+    "publish": ""
+}
+
+###
+PUT    http://localhost:3000/api/cow-groups/update-sort/4
+Content-Type: application/json
+
+
+
+###
+DELETE     http://localhost:3000/api/cow-groups/delete/2

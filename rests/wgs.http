@@ -1,0 +1,49 @@
+//wgs
+
+###
+GET http://localhost:3001/api/wgs/getall?orderby=&keyword=&limit=&start=
+Content-Type: application/json
+
+###
+GET http://localhost:3001/api/wgs/getbyid/3
+Content-Type: application/json
+
+###
+POST http://localhost:3001/api/wgs/create
+Content-Type: application/json
+
+{   
+    "name":"Fox",
+    "publish":"1",
+    "cow_breeds_id": "1",
+    "weight_p0_id": "4"
+}
+
+###
+PUT http://localhost:3001/api/wgs/update/4
+Content-Type: application/json
+
+{   
+    "name":"Foxs",
+    "publish":"",
+    "cow_breeds_id": "1",
+    "weight_p0_id": "1"
+}
+
+###
+PUT http://localhost:3001/api/wgs/update-publish/4
+Content-Type: application/json
+
+{
+    "publish": "1"
+}
+
+###
+PUT http://localhost:3001/api/wgs/update-sort/4
+Content-Type: application/json
+
+
+
+###
+DELETE http://localhost:3001/api/wgs/delete/1
+

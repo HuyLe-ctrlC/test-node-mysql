@@ -1,0 +1,17 @@
+GET http://localhost:3001/api/config/getall?keyword=
+Content-Type: application/json
+
+###
+GET http://localhost:3001/api/config/getbyid/3
+Content-Type: application/json
+
+###
+PUT http://localhost:3001/api/config/update/3
+Content-Type: application/json
+
+{   
+    "type":"google",
+    "content":"{analytics:UA-115803731-22,webmasters:Webmasters tools update,sitemaps:sitemap.xml}"
+}
+
+

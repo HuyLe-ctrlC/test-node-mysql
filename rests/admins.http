@@ -1,0 +1,74 @@
+//ADMINS ---------------------------------------------------------------------------------------------------------------------------------
+//get all data
+GET http://localhost:3000/api/admins/getall?orderby=&keyword=p18&start=&limit=2
+
+###
+//get name username follow keyword
+GET http://localhost:3000/api/admins/getall?keyword=aaaaaa
+
+###
+//Create data
+POST http://localhost:3000/api/admins/create
+Content-Type: application/json
+
+{
+     "name": "khuong",
+     "username": "khuong@gmail.com", 
+     "password": "123456",
+     "active": ""
+}
+
+###
+//select data by id
+GET http://localhost:3000/api/admins/getbyid/22222
+
+
+###
+//Update data
+PUT http://localhost:3000/api/admins/update/26
+Content-Type: application/json
+
+{
+     "name": "huy1",
+     "username": "huy12354",
+     "active": "1"
+}
+
+###
+//change password
+PUT http://localhost:3000/api/admins/changePassword/23
+Content-Type: application/json 
+
+{
+     "passwordCurrent": "",
+     "passwordNew": ""
+}
+
+###
+//login
+###
+POST http://localhost:3000/api/admins/login
+Content-Type: application/json 
+
+{
+     "username": "khuong@gmail.com",
+     "password": "123456"
+}
+
+###
+GET http://localhost:3000/api/admins/refreshToken
+
+###
+//Update-active data
+PUT http://localhost:3000/api/admins/update-active/11
+Content-Type: application/json
+
+{
+     "active": ""
+}
+
+###
+DELETE http://localhost:3000/api/admins/delete/22
+
+
+

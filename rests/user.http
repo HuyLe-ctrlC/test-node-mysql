@@ -1,0 +1,48 @@
+POST http://localhost:3000/api/user/register
+Content-Type: application/json
+
+{
+    "fullname": "Kim Quynh",
+    "phone": "159753",
+    "email": "quynh@gmail.com",
+    "gender": "1",
+    "birthday": "3569877",
+    "password": "123456",
+    "active": "1"
+}
+
+###
+
+PUT http://localhost:3000/api/user/update/80
+Content-Type: application/json
+
+{
+    "fullname": "Ngoc Phu abc",
+    "phone": "0907208553213",
+    "gender": "1",
+    "birthday": "18072000",
+    "active": "1"
+}
+
+###
+
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json 
+
+{
+    "email": "phu@gmail.com",
+    "password": "123456"
+}
+
+
+###
+GET  http://localhost:3000/api/city/getall?start=0&limit=&orderby=
+Authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMCwiaWF0IjoxNjY5NjAxNTM0LCJleHAiOjE2Njk2MDE1NTR9.Rso1Vglx5BhqsZeIVYuCjgvZTkPNXXXCrBvNH7cLwIQ
+
+
+###
+http://localhost:3000/api/auth/refreshToken
+
+###
+GET  http://localhost:3000/api/user/getall?orderby=&keyword=kh&start=&limit=
+Content-Type: 'application/json'

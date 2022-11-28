@@ -1,0 +1,54 @@
+//wges
+
+###
+GET  http://localhost:3000/api/wges/getall?orderby=&keyword=sf&limit=&start=2
+Content-Type: application/json
+
+###
+GET  http://localhost:3000/api/wges/getbyid/9
+Content-Type: application/json
+
+###
+POST   http://localhost:3000/api/wges/create
+Content-Type: application/json
+
+{   
+    "code":"sfasfdgbgdfd54654",
+    "name":"thi",
+    "min_value":"12.1",
+    "max_value":"19.8",
+    "publish":"1",
+    "sort": "2"
+}
+
+###
+PUT    http://localhost:3000/api/wges/update/14s
+Content-Type: application/json
+
+{   
+    "code":"sfasfdgd54654",
+    "name":"ádas",
+    "publish":"1",
+    "min_value":"13.5",
+    "max_value":"21.4",
+    "sort": "2",
+    "updated_at":""
+}
+
+###
+PUT    http://localhost:3000/api/wges/update-publish/1
+Content-Type: application/json
+
+{
+    "publish": "1"
+}
+
+###
+PUT    http://localhost:3000/api/wges/update-sort/8
+Content-Type: application/json
+
+
+
+###
+DELETE     http://localhost:3000/api/wges/delete/8
+

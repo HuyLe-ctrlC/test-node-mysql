@@ -1,0 +1,43 @@
+###
+GET  http://localhost:3000/api/bank/getall?orderby=
+Content-Type: 'application/json'
+
+###
+GET  http://localhost:3000/api/bank/getbyid/6
+Content-Type: 'application/json'
+
+###
+POST http://localhost:3000/api/bank/create
+Content-Type: application/json
+
+{   
+    "name":"hau",
+    "publish":"1",
+    "sort": "2"
+}
+
+###
+PUT    http://localhost:3000/api/bank/update/1
+Content-Type: application/json
+
+{
+    "name":"tienaaa",
+    "publish":"1",
+    "sort": "2",
+    "updated_at":""
+}
+
+###
+PUT   http://localhost:3000/api/bank/update-publish/1
+Content-Type: application/json
+
+{
+    "publish": ""
+}
+###
+PUT    http://localhost:3000/api/bank/update-sort/1
+Content-Type: 'application/json'
+
+
+###
+DELETE     http://localhost:3000/api/bank/delete/15

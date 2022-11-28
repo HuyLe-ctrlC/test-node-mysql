@@ -1,0 +1,41 @@
+GET  http://localhost:3000/api/role/getall?orderby=&keyword=le&start=&limit=
+Content-Type: 'application/json'
+###
+GET  http://localhost:3000/api/role/getbyid/454
+Content-Type: application/json
+
+###
+POST   http://localhost:3000/api/role/create
+Content-Type: application/json
+
+{
+    "name":"khuong",
+    "publish":"1",
+    "sort": "2"
+}
+
+###
+PUT    http://localhost:3000/api/role/update/gffhgfhdfggdfgrtrh
+Content-Type: application/json
+
+{
+    "name":"khuong",
+    "publish":"1",
+    "sort": "2",
+    "updated-at":""
+}
+
+###
+PUT    http://localhost:3000/api/role/update-publish/3423
+Content-Type: application/json
+
+{
+    "publish": "1"
+}
+
+###
+PUT    http://localhost:3000/api/role/update-sort/4
+Content-Type: application/json
+
+###
+DELETE     http://localhost:3000/api/role/delete/4

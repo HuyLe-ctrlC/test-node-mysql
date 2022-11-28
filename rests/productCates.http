@@ -1,0 +1,43 @@
+//product-cates
+
+###
+GET  http://localhost:3000/api/product-cates/getall?orderby=desc&keyword=100&limit=&start=
+Content-Type: application/json
+
+###
+GET  http://localhost:3000/api/product-cates/getbyid/sdfgsdfg
+Content-Type: application/json
+
+###
+POST   http://localhost:3000/api/product-cates/create
+Content-Type: application/json
+
+{   
+    "code":"đâsdggdfsfgdfg",
+    "name":"duy khuong",
+    "publish":"1",
+    "sort": "2"
+}
+
+###
+PUT    http://localhost:3000/api/product-cates/update/fdgfd
+Content-Type: application/json
+
+{   "code":"đâsdggdfsfgdfg",
+    "name":"tien"
+    
+}
+
+###
+PUT    http://localhost:3000/api/product-cates/update-publish/6
+Content-Type: application/json
+
+{
+    "publish": ""
+}
+
+###
+PUT    http://localhost:3000/api/product-cates/update-sort/8
+Content-Type: 'application/json'
+###
+DELETE     http://localhost:3000/api/product-cates/delete/2
