@@ -7,24 +7,6 @@ module.exports = (app) => {
 
     // Retrieve all data
     router.get('/getbyid/:id', userController.findById);
-
-    // Show form create data
-    router.post(
-        '/register',
-        [
-            body('fullname', 'The name must be of minimum 3 characters length')
-                .notEmpty()
-                .escape()
-                .trim()
-                .isLength({ min: 3 }),
-            body('email', 'Invalid email address').notEmpty().escape().trim().isEmail(),
-            body('password', 'The Password must be of minimum 6 characters length')
-                .notEmpty()
-                .trim()
-                .isLength({ min: 6 }),
-        ],
-        userController.register,
-    );
     router.put(
         '/update/:id',
         // [

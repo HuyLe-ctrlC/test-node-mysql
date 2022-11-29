@@ -13,13 +13,20 @@ const City = function (city) {
 
 // select data all
 City.getAll = (dataSearch, limit, offset, orderby, result) => {
-    let query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName}  ORDER BY id ${orderby} LIMIT ?,?`;
-    if (dataSearch.keyword) {
+    let query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName}  ORDER BY id ${orderby}`;
+    if (limit) {
+        query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName}  ORDER BY id ${orderby} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && limit) {
         let keyword = dataSearch.keyword;
         query = `SELECT *, (SELECT COUNT(*) from ${tableName} WHERE  name LIKE "%${keyword}%" ) as total FROM ${tableName} WHERE name LIKE "%${keyword}%" ORDER BY id ${orderby} LIMIT ?,?`;
     }
+    if (dataSearch.keyword && !limit) {
+        let keyword = dataSearch.keyword;
+        query = `SELECT *, (SELECT COUNT(*) from ${tableName} WHERE  name LIKE "%${keyword}%" ) as total FROM ${tableName} WHERE name LIKE "%${keyword}%" ORDER BY id ${orderby}`;
+    }
     db.query(query, [offset, limit], (err, res) => {
-        console.log(err);
+        // console.log(err);
         if (err) {
             // console.log(err);
             result({ msg: ERROR }, null);
@@ -49,7 +56,7 @@ City.findById = (id, result) => {
 City.create = (newsData, result) => {
     db.query(`INSERT INTO ${tableName} SET ?`, newsData, function (err, res) {
         if (err) {
-            // console.log('error', err);
+            console.log('error', err);
             result({ msg: ERROR }, null);
             return;
         }

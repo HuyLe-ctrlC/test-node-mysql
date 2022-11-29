@@ -6,6 +6,7 @@ const Admins = function (admins) {
     this.name = admins.name;
     this.username = admins.username;
     this.password = admins.password;
+    this.refreshToken = admins.refreshToken;
     this.active = admins.active;
     this.created_at = admins.created_at;
     this.updated_at = admins.updated_at;
@@ -25,11 +26,20 @@ Admins.getAll = (dataSearch, limit, result) => {
     if (dataSearch.orderby) {
         orderBy = dataSearch.orderby;
     }
-    let query = `SELECT *, (SELECT COUNT(*) FROM ${tableName}) as total FROM ${tableName} ORDER BY id ${orderBy} LIMIT ?,?`;
-    if (dataSearch.keyword) {
+    let query = `SELECT *, (SELECT COUNT(*) FROM ${tableName}) as total FROM ${tableName} ORDER BY id ${orderBy}`;
+    if (limit) {
+        query = `SELECT *, (SELECT COUNT(*) FROM ${tableName}) as total FROM ${tableName} ORDER BY id ${orderBy} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && limit) {
         keyword = dataSearch.keyword;
         like = `WHERE name LIKE "%${keyword}%" OR username LIKE "%${keyword}%" `;
         query = `SELECT *, (SELECT COUNT(*) FROM ${tableName} ${like}) as total FROM ${tableName} ${like} ORDER BY id ${orderBy} LIMIT ?,?`;
+    }
+
+    if (dataSearch.keyword && !limit) {
+        keyword = dataSearch.keyword;
+        like = `WHERE name LIKE "%${keyword}%" OR username LIKE "%${keyword}%" `;
+        query = `SELECT *, (SELECT COUNT(*) FROM ${tableName} ${like}) as total FROM ${tableName} ${like} ORDER BY id ${orderBy}`;
     }
 
     db.query(query, [offset, limit], (err, res) => {
@@ -57,14 +67,19 @@ Admins.getByID = (id, result) => {
 Admins.create = (newsData, result) => {
     const q = `SELECT username FROM ${tableName}`;
     db.query(q, (err, res) => {
+        // console.log('error', err);
+        if (err) {
+            result({ msg: ERROR }, null);
+            return;
+        }
         const usernameDb = res.map((value, i) => {
             return value.username;
         });
         const username = newsData.username;
         if (!usernameDb.includes(String(username))) {
             db.query(`INSERT INTO ${tableName} SET ?`, newsData, function (err, res) {
+                // console.log('error', err);
                 if (err) {
-                    // console.log('error', err);
                     result({ msg: ERROR }, null);
                     return;
                 }
@@ -141,41 +156,6 @@ Admins.remove = (id, result) => {
 Admins.updateRefreshToken = (id, tokenRefresh) => {
     const qe = `UPDATE ${tableName} SET refreshToken = ? WHERE id = ?`;
     db.query(qe, [tokenRefresh, id]);
-};
-
-//Reset Password
-Admins.updatePasswordById = (id, passwordNew, passwordCurrent, result) => {
-    db.query(
-        `SELECT * FROM ${tableName} WHERE id = ${id}`,
-
-        async (err, res) => {
-            if (err) {
-                result({ msg: ERROR }, null);
-                return;
-            }
-            const passMatch = await bcrypt.compare(passwordCurrent.password, res[0].password);
-            if (passMatch) {
-                const hashPass = await bcrypt.hash(passwordNew, 12);
-                // console.log(hashPass);
-                db.query(`UPDATE ${tableName} SET password = ? WHERE id = ${id}`, hashPass, (err, res) => {
-                    // console.log(err, res);
-                    if (err) {
-                        result({ msg: ERROR }, null);
-                        return;
-                    }
-                    if (res.affectedRows == 0) {
-                        // not found todo with the id
-                        result({ msg: `ID ${NOT_EXITS}` }, null);
-                        return;
-                    }
-                    result(null, res);
-                    return;
-                });
-            } else {
-                result({ msg: 'Mật khẩu cũ không đúng' });
-            }
-        },
-    );
 };
 
 module.exports = Admins;

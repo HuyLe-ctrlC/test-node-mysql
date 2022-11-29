@@ -20,10 +20,17 @@ const Districts = function (districts) {
 
 //select all districts
 Districts.getAll = (dataSearch, limit, offset, orderby, result) => {
-    let query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName} ORDER BY id ${orderby} LIMIT ?,?`;
-    if (dataSearch.keyword) {
+    let query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName} ORDER BY id ${orderby}`;
+    if (limit) {
+        query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName} ORDER BY id ${orderby} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && limit) {
         let keyword = dataSearch.keyword;
         query = `SELECT *, (SELECT COUNT(*) from ${tableName} WHERE code LIKE "%${keyword}%" OR name LIKE "%${keyword}%" OR cityID LIKE "%${keyword}%" ) as total FROM ${tableName} WHERE code LIKE "%${keyword}%" OR name LIKE "%${keyword}%" OR cityID LIKE "%${keyword}%" ORDER BY id ${orderby} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && !limit) {
+        let keyword = dataSearch.keyword;
+        query = `SELECT *, (SELECT COUNT(*) from ${tableName} WHERE code LIKE "%${keyword}%" OR name LIKE "%${keyword}%" OR cityID LIKE "%${keyword}%" ) as total FROM ${tableName} WHERE code LIKE "%${keyword}%" OR name LIKE "%${keyword}%" OR cityID LIKE "%${keyword}%" ORDER BY id ${orderby}`;
     }
     db.query(query, [offset, limit], (err, res) => {
         // console.log(q);
@@ -50,7 +57,7 @@ Districts.getByID = (id, result) => {
 Districts.create = (newsData, result) => {
     const q = `SELECT code FROM ${tableName}`;
     db.query(q, (err, res) => {
-        // console.log(err);
+        console.log(err);
         if (err) {
             result({ msg: ERROR }, null);
             return;
@@ -62,7 +69,12 @@ Districts.create = (newsData, result) => {
         if (!codeDb.includes(String(code))) {
             const q = `SELECT id FROM ${tableNameCity}`;
             db.query(q, (err, res) => {
-                // console.log(err);
+                console.log(err);
+                if (err) {
+                    console.log('error', err);
+                    result({ msg: ERROR }, null);
+                    return;
+                }
                 const idDb = res.map((value, i) => {
                     return value.id;
                 });
@@ -73,7 +85,7 @@ Districts.create = (newsData, result) => {
                 if (idDb.includes(parseInt(cityID))) {
                     db.query(`INSERT INTO ${tableName} SET ?`, [newsData], function (err, res) {
                         if (err) {
-                            // console.log('error', err);
+                            console.log('error', err);
                             result({ msg: ERROR }, null);
                             return;
                         }

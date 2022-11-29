@@ -26,6 +26,7 @@ exports.findAll = (req, res) => {
     }
     // console.log(dataSearch);
     Wards.getAll(dataSearch, limit, (err, data) => {
+        // console.log(err, data);
         if (err) {
             res.send({ result: false, msg: err });
         } else {

@@ -20,10 +20,17 @@ const Farms = function (product) {
 
 //select data all
 Farms.getAll = (dataSearch, limit, offset, orderby, result) => {
-    let query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName} ORDER BY id ${orderby} LIMIT ?,?`;
-    if (dataSearch.keyword) {
+    let query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName} ORDER BY id ${orderby}`;
+    if (limit) {
+        query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName} ORDER BY id ${orderby} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && limit) {
         let keyword = dataSearch.keyword;
-        query = `SELECT *, (SELECT COUNT(*) from ${tableName} WHERE code LIKE "%${keyword}%" OR name LIKE "%${keyword}%" OR phone LIKE "%${keyword}%" OR cityID LIKE "%${keyword}%" OR districtID LIKE "%${keyword}%" OR wardID LIKE "%${keyword}%" ) as total FROM ${tableName} WHERE code LIKE "%${keyword}%" OR name LIKE "%${keyword}%" OR phone LIKE "%${keyword}%" OR cityID LIKE "%${keyword}%" OR districtID LIKE "%${keyword}%" OR wardID LIKE "%${keyword}%" ORDER BY id ${orderby} LIMIT ?,?`;
+        query = `SELECT *, (SELECT COUNT(*) from ${tableName} WHERE code LIKE "%${keyword}%" OR address LIKE "%${keyword}%" OR name LIKE "%${keyword}%" OR phone LIKE "%${keyword}%" OR cityID LIKE "%${keyword}%" OR districtID LIKE "%${keyword}%" OR wardID LIKE "%${keyword}%" ) as total FROM ${tableName} WHERE code LIKE "%${keyword}%" OR address LIKE "%${keyword}%" OR name LIKE "%${keyword}%" OR phone LIKE "%${keyword}%" OR cityID LIKE "%${keyword}%" OR districtID LIKE "%${keyword}%" OR wardID LIKE "%${keyword}%" ORDER BY id ${orderby} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && !limit) {
+        let keyword = dataSearch.keyword;
+        query = `SELECT *, (SELECT COUNT(*) from ${tableName} WHERE code LIKE "%${keyword}%" OR address LIKE "%${keyword}%" OR name LIKE "%${keyword}%" OR phone LIKE "%${keyword}%" OR cityID LIKE "%${keyword}%" OR districtID LIKE "%${keyword}%" OR wardID LIKE "%${keyword}%" ) as total FROM ${tableName} WHERE code LIKE "%${keyword}%" OR address LIKE "%${keyword}%" OR name LIKE "%${keyword}%" OR phone LIKE "%${keyword}%" OR cityID LIKE "%${keyword}%" OR districtID LIKE "%${keyword}%" OR wardID LIKE "%${keyword}%" ORDER BY id ${orderby}`;
     }
     db.query(query, [offset, limit], (err, res) => {
         // console.log(q);
@@ -62,6 +69,7 @@ Farms.create = (data, result) => {
     const q = `SELECT code FROM ${tableName}`;
 
     db.query(q, (err, res) => {
+        console.log(err);
         if (err) {
             result({ msg: ERROR }, null);
             return;
@@ -74,6 +82,7 @@ Farms.create = (data, result) => {
             const q = `INSERT INTO ${tableName} SET ?`;
 
             db.query(q, [data], (err, res) => {
+                console.log(err);
                 if (err) {
                     result({ msg: ERROR }, null);
                     return;
@@ -90,6 +99,7 @@ Farms.create = (data, result) => {
 Farms.updateById = (data, result) => {
     const q = `SELECT code FROM ${tableName} WHERE id = ?`;
     db.query(q, [data.id], (err, res) => {
+        console.log(err);
         if (res && res.length === 0) {
             result({ msg: `ID ${NOT_EXITS}` }, null);
             return;
@@ -101,25 +111,13 @@ Farms.updateById = (data, result) => {
         const code = data.code;
 
         if (res[0].code === code) {
-            const q = `UPDATE ${tableName} SET code = ?, name= ?,phone = ?,cityID = ?,districtID = ?,wardID = ?,address=?, publish = ?, sort = ?, updated_at = ? WHERE id = ?`;
+            const q = `UPDATE ${tableName} SET code = ?, name= ?,phone = ?, address=?, publish = ?, sort = ?, updated_at = ? WHERE id = ?`;
 
             db.query(
                 q,
-                [
-                    data.code,
-                    data.name,
-                    data.phone,
-                    data.cityID,
-                    data.districtID,
-                    data.wardID,
-                    data.address,
-                    data.publish,
-                    data.sort,
-                    data.updated_at,
-                    data.id,
-                ],
+                [data.code, data.name, data.phone, data.address, data.publish, data.sort, data.updated_at, data.id],
                 (err, res) => {
-                    // console.log(err);
+                    console.log(err);
                     if (err) {
                         result({ msg: ERROR }, null);
                         return;

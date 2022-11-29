@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const constants = require('../config/constants');
 const dbConfig = require('../config/db.config');
 const db = require('../models/connectDB').promise();
+const nodemailer = require('nodemailer');
 
 const {
     ADD_DATA_SUCCESS,
@@ -45,54 +46,6 @@ exports.findById = (req, res) => {
             res.send({ result: false, data: err });
         } else res.send({ result: true, data: data ? data : null });
     });
-};
-
-exports.register = async (req, res) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
-    }
-    const [row] = await db.execute(`SELECT * FROM tbl_users WHERE email= ? OR phone = ?`, [
-        req.body.email,
-        req.body.phone,
-    ]);
-    if (row.length !== 0) {
-        return res.status(422).json({
-            message: 'Email hoặc Số điện thoại đã tồn tại',
-        });
-    }
-    const m = 'nam';
-    const f = 'nữ';
-    try {
-        const hashPass = await bcrypt.hash(req.body.password, 12);
-        // Create a data
-        const user = new User({
-            fullname: req.body.fullname,
-            phone: req.body.phone,
-            email: req.body.email,
-            gender: req.body.gender,
-            birthday: req.body.birthday,
-            password: hashPass,
-            active: req.body.active,
-            created_at: Date.now(),
-        });
-        delete user.updated_at;
-
-        User.register(user, (err, data) => {
-            if (err) {
-                res.send({ result: false, data: err });
-            } else {
-                user.id = data.id;
-                res.send({
-                    result: true,
-                    msg: ADD_DATA_SUCCESS,
-                    insertId: data.id,
-                    newData: user,
-                });
-            }
-        });
-    } catch (error) {}
 };
 
 exports.update = async (req, res) => {

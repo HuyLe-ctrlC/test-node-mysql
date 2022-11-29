@@ -2,8 +2,15 @@ const { validationResult } = require('express-validator');
 const Class = require('../models/class.model');
 const constants = require('../config/constants');
 
-const { ADD_DATA_SUCCESS, ADD_DATA_FAILED, UPDATE_DATA_SUCCESS, UPDATE_DATA_FAILED, DELETE_DATA_SUCCESS } =
-    constants.constantNotify;
+const {
+    ADD_DATA_SUCCESS,
+    ADD_DATA_FAILED,
+    UPDATE_DATA_SUCCESS,
+    UPDATE_DATA_FAILED,
+    DELETE_DATA_SUCCESS,
+    OBTAIN,
+    NOT_OBTAIN,
+} = constants.constantNotify;
 
 // get all data
 exports.findAll = (req, res) => {
@@ -62,6 +69,18 @@ exports.create = async (req, res) => {
     if (!errors.isEmpty()) {
         return res.json({ result: false, errors: errors.array() });
     }
+    let status;
+    switch (req.body.sale_status) {
+        case OBTAIN:
+            status = 1;
+            break;
+        case NOT_OBTAIN:
+            status = 0;
+            break;
+
+        default:
+            break;
+    }
     try {
         //req from client
         const classs = new Class({
@@ -69,7 +88,7 @@ exports.create = async (req, res) => {
             balance_ale_min: req.body.balance_ale_min,
             balance_ale_max: req.body.balance_ale_max,
             discount: req.body.discount,
-            sale_status: !req.body.sale_status ? false : true,
+            sale_status: status,
             publish: !req.body.publish ? false : true,
             created_at: Date.now(),
         });
@@ -111,13 +130,26 @@ exports.update = (req, res) => {
     if (!errors.isEmpty()) {
         return res.json({ result: false, errors });
     }
+    console.log(req.body.sale_status);
+    let status;
+    switch (req.body.sale_status) {
+        case OBTAIN:
+            status = 1;
+            break;
+        case NOT_OBTAIN:
+            status = 0;
+            break;
+
+        default:
+            break;
+    }
     try {
         const classs = new Class({
             name: req.body.name,
             balance_ale_min: req.body.balance_ale_min,
             balance_ale_max: req.body.balance_ale_max,
             discount: req.body.discount,
-            sale_status: !req.body.sale_status ? false : true,
+            sale_status: status,
             publish: !req.body.publish ? false : true,
             updated_at: Date.now(),
             id: req.params.id,

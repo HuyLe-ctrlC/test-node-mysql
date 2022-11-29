@@ -9,6 +9,8 @@ const {
     UPDATE_DATA_SUCCESS,
     UPDATE_DATA_FAILED,
     DELETE_DATA_SUCCESS,
+    COMPLETE,
+    NOT_COMPLETE,
 } = constants.constantNotify;
 // get all data
 exports.findAll = (req, res) => {
@@ -61,6 +63,18 @@ exports.create = async (req, res) => {
         return res.json({ result: false, errors: errors.array() });
     }
     try {
+        let status;
+        switch (req.body.overdraft_payment_status) {
+            case COMPLETE:
+                status = 1;
+                break;
+            case NOT_COMPLETE:
+                status = 0;
+                break;
+
+            default:
+                break;
+        }
         //req from client
         const levels = new Levels({
             name: req.body.name,
@@ -68,7 +82,7 @@ exports.create = async (req, res) => {
             use_ale_min: req.body.use_ale_min,
             use_ale_max: req.body.use_ale_max,
             overdraft_payment_amout: req.body.overdraft_payment_amout,
-            overdraft_payment_status: !req.body.overdraft_payment_status ? false : true,
+            overdraft_payment_status: status,
             publish: !req.body.publish ? false : true,
             created_at: Date.now(),
         });
@@ -110,6 +124,18 @@ exports.update = (req, res) => {
     if (!errors.isEmpty()) {
         return res.json({ result: false, errors });
     }
+    let status;
+    switch (req.body.overdraft_payment_status) {
+        case COMPLETE:
+            status = 1;
+            break;
+        case NOT_COMPLETE:
+            status = 0;
+            break;
+
+        default:
+            break;
+    }
     try {
         const levels = new Levels({
             name: req.body.name,
@@ -117,7 +143,7 @@ exports.update = (req, res) => {
             use_ale_min: req.body.use_ale_min,
             use_ale_max: req.body.use_ale_max,
             overdraft_payment_amout: req.body.overdraft_payment_amout,
-            overdraft_payment_status: !req.body.overdraft_payment_status ? false : true,
+            overdraft_payment_status: status,
             publish: !req.body.publish ? false : true,
             updated_at: Date.now(),
             id: req.params.id,

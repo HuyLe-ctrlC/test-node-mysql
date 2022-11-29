@@ -26,15 +26,24 @@ Wards.getAll = (dataSearch, limit, result) => {
     if (dataSearch.orderby) {
         orderBy = dataSearch.orderby;
     }
-    let query = `SELECT *, (SELECT COUNT(*) FROM ${tableNameWards}) as total FROM ${tableNameWards} ORDER BY id ${orderBy} LIMIT ?,?`;
-    if (dataSearch.keyword) {
+    let query = `SELECT *, (SELECT COUNT(*) FROM ${tableNameWards}) as total FROM ${tableNameWards} ORDER BY id ${orderBy} `;
+
+    if (!!limit) {
+        query = `SELECT *, (SELECT COUNT(*) FROM ${tableNameWards}) as total FROM ${tableNameWards} ORDER BY id ${orderBy} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && limit) {
         keyword = dataSearch.keyword;
-        like = `WHERE name LIKE "%${keyword}%" OR code LIKE "%${keyword}%" `;
+        like = `WHERE name LIKE "%${keyword}%" OR code LIKE "%${keyword}%" OR districtID LIKE "%${keyword}%" `;
         query = `SELECT *, (SELECT COUNT(*) FROM ${tableNameWards} ${like}) as total FROM ${tableNameWards} ${like} ORDER BY id ${orderBy} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && !limit) {
+        keyword = dataSearch.keyword;
+        like = `WHERE name LIKE "%${keyword}%" OR code LIKE "%${keyword}%" OR districtID LIKE "%${keyword}%" `;
+        query = `SELECT *, (SELECT COUNT(*) FROM ${tableNameWards} ${like}) as total FROM ${tableNameWards} ${like} ORDER BY id ${orderBy}`;
     }
 
     db.query(query, [offset, limit], (err, res) => {
-        // console.log(q);
+        // console.log(query);
         // console.log(err, res);
         if (err) {
             result({ msg: ERROR }, null);
@@ -46,6 +55,7 @@ Wards.getAll = (dataSearch, limit, result) => {
 // //select wards by id
 Wards.getByID = (id, result) => {
     db.query(`SELECT * FROM ${tableNameWards} WHERE id = ${id}`, (err, res) => {
+        console.log(err);
         if (err) {
             result({ msg: ERROR }, null);
             return;

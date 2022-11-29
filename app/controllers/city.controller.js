@@ -3,12 +3,18 @@ const { validationResult } = require('express-validator');
 const Districts = require('../models/districts.model');
 const constants = require('../config/constants');
 
-const { ADD_DATA_SUCCESS, ADD_DATA_FAILED, UPDATE_DATA_SUCCESS, UPDATE_DATA_FAILED, DELETE_DATA_SUCCESS } =
-    constants.constantNotify;
+const {
+    ADD_DATA_SUCCESS,
+    ADD_DATA_FAILED,
+    UPDATE_DATA_SUCCESS,
+    UPDATE_DATA_FAILED,
+    DELETE_DATA_SUCCESS,
+    DEFAULT_LIMIT,
+} = constants.constantNotify;
 
 exports.findAll = (req, res) => {
     let dataSearch = {};
-    let limit = 15;
+    let limit = DEFAULT_LIMIT;
     let offset = 0;
     let orderby = 'asc';
     if (req.query) {

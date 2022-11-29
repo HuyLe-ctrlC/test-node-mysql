@@ -24,12 +24,17 @@ let make = function (data) {
 //refreshToken
 let refreshToken = function (data) {
     return new Promise(function (resolve, reject) {
-        jwt.sign({ data: data }, REFRESH_TOKEN, { algorithm: 'HS256', expiresIn: '1d' }, function (err, _refreshToken) {
-            if (err) {
-                return reject(err);
-            }
-            return resolve(_refreshToken);
-        });
+        jwt.sign(
+            { data: data },
+            REFRESH_TOKEN,
+            { algorithm: 'HS256', expiresIn: '30s' },
+            function (err, _refreshToken) {
+                if (err) {
+                    return reject(err);
+                }
+                return resolve(_refreshToken);
+            },
+        );
     });
 };
 

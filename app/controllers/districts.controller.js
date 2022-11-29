@@ -4,6 +4,7 @@ const { query } = require('../models/connectDB');
 const moment = require('moment');
 // const date = moment(new Date()).format("YYYY-MM-DD");
 const constants = require('../config/constants');
+const db = require('../models/connectDB').promise();
 
 const { ADD_DATA_SUCCESS, ADD_DATA_FAILED, UPDATE_DATA_SUCCESS, UPDATE_DATA_FAILED, DELETE_DATA_SUCCESS } =
     constants.constantNotify;
@@ -252,11 +253,18 @@ exports.delete = (req, res) => {
 };
 
 // search;
-exports.searchDictricts = (req, res) => {
+exports.searchDictricts = async (req, res) => {
     const { cityID } = req.query;
+    const [cityName] = await db.execute('SELECT id, name FROM `tbl_city` WHERE `id`=?', [cityID]);
+    if (cityName.length === 0) {
+        return res.status(422).json({
+            result: false,
+            data: { msg: 'cityID không tồn tại' },
+        });
+    }
     Districts.searchDictricts(cityID, (err, data) => {
         if (err) {
             res.send({ result: false, msg: err });
-        } else res.send({ result: true, data: [{ cityID: cityID, districts: data }] });
+        } else res.send({ result: true, data: [{ cityID: cityID, cityName: cityName[0].name, districts: data }] });
     });
 };

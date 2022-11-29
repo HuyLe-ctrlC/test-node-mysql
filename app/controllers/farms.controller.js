@@ -1,13 +1,19 @@
 const { validationResult } = require('express-validator');
 const Farms = require('../models/farms.model');
 const constants = require('../config/constants');
-const { ADD_DATA_SUCCESS, ADD_DATA_FAILED, UPDATE_DATA_SUCCESS, UPDATE_DATA_FAILED, DELETE_DATA_SUCCESS } =
-    constants.constantNotify;
+const {
+    DEFAULT_LIMIT,
+    ADD_DATA_SUCCESS,
+    ADD_DATA_FAILED,
+    UPDATE_DATA_SUCCESS,
+    UPDATE_DATA_FAILED,
+    DELETE_DATA_SUCCESS,
+} = constants.constantNotify;
 
 // get all data
 exports.findAll = (req, res) => {
     let dataSearch = {};
-    let limit = 15;
+    let limit = DEFAULT_LIMIT;
     let offset = 0;
     let orderby = 'asc';
     if (req.query) {
@@ -66,10 +72,10 @@ exports.create = async (req, res) => {
         const product = new Farms({
             code: req.body.code,
             name: req.body.name,
-            phone: req.body.phone,
-            cityID: req.body.cityID,
-            districtID: req.body.districtID,
-            wardID: req.body.wardID,
+            phone: parseInt(req.body.phone),
+            cityID: parseInt(req.body.cityID),
+            districtID: parseInt(req.body.districtID),
+            wardID: parseInt(req.body.wardID),
             address: req.body.address,
             publish: !req.body.publish ? false : true,
             sort: 0,
@@ -117,15 +123,12 @@ exports.update = (req, res) => {
         const product = new Farms({
             code: req.body.code,
             name: req.body.name,
-            phone: req.body.phone,
-            cityID: req.body.cityID,
-            districtID: req.body.districtID,
-            wardID: req.body.wardID,
+            phone: parseInt(req.body.phone),
             address: req.body.address,
             publish: !req.body.publish ? false : true,
             sort: 0,
             updated_at: Date.now(),
-            id: req.params.id,
+            id: parseInt(req.params.id),
         });
 
         //only create -> delete
@@ -135,8 +138,7 @@ exports.update = (req, res) => {
                 res.send({ result: false, errors: [err] });
                 return;
             }
-            product.id = req.params.id;
-            product.updated_at = 0;
+            product.id = parseInt(req.params.id);
             res.send({
                 result: true,
                 data: [

@@ -30,11 +30,19 @@ Levels.getAll = (dataSearch, limit, result) => {
     if (dataSearch.orderby) {
         orderBy = dataSearch.orderby;
     }
-    let query = `SELECT *, (SELECT COUNT(*) FROM ${tableName}) as total FROM ${tableName} ORDER BY id ${orderBy} LIMIT ?,?`;
-    if (dataSearch.keyword) {
+    let query = `SELECT *, (SELECT COUNT(*) FROM ${tableName}) as total FROM ${tableName} ORDER BY id ${orderBy}`;
+    if (limit) {
+        query = `SELECT *, (SELECT COUNT(*) FROM ${tableName}) as total FROM ${tableName} ORDER BY id ${orderBy} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && limit) {
         keyword = dataSearch.keyword;
         like = `WHERE name LIKE "%${keyword}%" `;
         query = `SELECT *, (SELECT COUNT(*) FROM ${tableName} ${like}) as total FROM ${tableName} ${like} ORDER BY id ${orderBy} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && !limit) {
+        keyword = dataSearch.keyword;
+        like = `WHERE name LIKE "%${keyword}%" `;
+        query = `SELECT *, (SELECT COUNT(*) FROM ${tableName} ${like}) as total FROM ${tableName} ${like} ORDER BY id ${orderBy}`;
     }
 
     db.query(query, [offset, limit], (err, res) => {
@@ -74,7 +82,7 @@ Levels.create = (data, result) => {
     const q = `INSERT INTO ${tableName} SET ?`;
 
     db.query(q, [data], (err, res) => {
-        // console.log(err);
+        console.log(err);
         if (err) {
             result({ msg: ERROR }, null);
             return;
@@ -101,7 +109,7 @@ Levels.updateById = (data, result) => {
             data.id,
         ],
         (err, res) => {
-            // console.log(err);
+            console.log(err);
             if (err) {
                 result({ msg: ERROR }, null);
                 return;

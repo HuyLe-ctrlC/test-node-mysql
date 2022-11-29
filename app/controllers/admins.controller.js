@@ -76,6 +76,7 @@ exports.create = async (req, res) => {
             name: name,
             username: username,
             password: hashPass,
+            refreshToken: 0,
             active: !active ? false : true,
             created_at: Date.now(),
         });
@@ -244,53 +245,6 @@ exports.refreshToken = async (req, res) => {
     }
 };
 // Update password by ID
-exports.updatePassword = async (req, res) => {
-    const { passwordCurrent, passwordNew } = req.body;
-    // console.log(passwordCurrent, passwordNew);
-    // Validate Request
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(422).json({ result: false, errors: errors.array() });
-    }
-    // const hassPass = await bcrypt.hash(passwordNew, 12);
-    try {
-        // password update
-        const admins = new Admins({
-            password: passwordCurrent,
-            updated_at: Date.now(),
-        });
-        // console.log(admins);
-
-        Admins.updatePasswordById(req.params.id, passwordNew, admins, (err, data) => {
-            if (err) {
-                // console.log('err: ', err);
-                res.send({
-                    result: false,
-                    errors: [err],
-                });
-            } else {
-                res.send({
-                    result: true,
-                    data: [
-                        {
-                            msg: 'Đổi mật khẩu thành công',
-                        },
-                    ],
-                });
-            }
-        });
-    } catch (error) {
-        // console.log('err: ', error);
-        res.send({
-            result: false,
-            errors: [
-                {
-                    msg: 'Đổi mật khẩu thất bại',
-                },
-            ],
-        });
-    }
-};
 
 // Update active field by ID
 exports.updateActive = (req, res) => {

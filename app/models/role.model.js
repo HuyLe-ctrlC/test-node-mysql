@@ -23,11 +23,19 @@ Role.getAll = (dataSearch, limit, result) => {
     if (dataSearch.orderby) {
         orderBy = dataSearch.orderby;
     }
-    let query = `SELECT *, (SELECT COUNT(*) FROM ${tableName}) as total FROM ${tableName} ORDER BY id ${orderBy} LIMIT ?,?`;
-    if (dataSearch.keyword) {
+    let query = `SELECT *, (SELECT COUNT(*) FROM ${tableName}) as total FROM ${tableName} ORDER BY id ${orderBy}`;
+    if (limit) {
+        query = `SELECT *, (SELECT COUNT(*) FROM ${tableName}) as total FROM ${tableName} ORDER BY id ${orderBy} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && limit) {
         keyword = dataSearch.keyword;
         like = `WHERE name LIKE "%${keyword}%"`;
         query = `SELECT *, (SELECT COUNT(*) FROM ${tableName} ${like}) as total FROM ${tableName} ${like} ORDER BY id ${orderBy} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && !limit) {
+        keyword = dataSearch.keyword;
+        like = `WHERE name LIKE "%${keyword}%"`;
+        query = `SELECT *, (SELECT COUNT(*) FROM ${tableName} ${like}) as total FROM ${tableName} ${like} ORDER BY id ${orderBy}`;
     }
 
     db.query(query, [offset, limit], (err, res) => {
@@ -56,6 +64,7 @@ Role.findById = (id, result) => {
 // insert db
 Role.create = (newsData, result) => {
     db.query(`INSERT INTO ${tableName} SET ?`, newsData, function (err, res) {
+        console.log(err);
         if (err) {
             // console.log('error', err);
             result({ msg: ERROR }, null);

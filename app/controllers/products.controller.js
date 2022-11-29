@@ -64,7 +64,7 @@ exports.create = async (req, res) => {
     // console.log(req.file);
     // sharp(req && req.file && req.file.path) //path file image
     //     .resize(200, 200)
-    //     .toFile(`./uploads/image/thumb/${req.file.filename}`, function (err) {
+    //     .toFile(`./app/uploads/image/thumb/${req.file.filename}`, function (err) {
     //         if (err) {
     //             res.send({ result: false, errors: [err] });
     //             return;
@@ -124,7 +124,7 @@ exports.update = (req, res) => {
     }
     // sharp(req && req.file && req.file.path)
     //     .resize(200, 200)
-    //     .toFile(`./uploads/image/thumb/${req.file.filename}`, function (err) {
+    //     .toFile(`./app/uploads/image/thumb/${req.file.filename}`, function (err) {
     //         if (err) {
     //             res.send({ result: false, errors: [err] });
     //             return;

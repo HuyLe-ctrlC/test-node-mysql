@@ -18,10 +18,17 @@ const Class = function (classs) {
 
 //select data all
 Class.getAll = (dataSearch, limit, offset, orderby, result) => {
-    let query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName} ORDER BY id ${orderby} LIMIT ?,?`;
-    if (dataSearch.keyword) {
+    let query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName} ORDER BY id ${orderby}`;
+    if (limit) {
+        query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName} ORDER BY id ${orderby} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && limit) {
         let keyword = dataSearch.keyword;
         query = `SELECT *, (SELECT COUNT(*) from ${tableName} WHERE  name LIKE "%${keyword}%" ) as total FROM ${tableName} WHERE name LIKE "%${keyword}%" ORDER BY id ${orderby} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && !limit) {
+        let keyword = dataSearch.keyword;
+        query = `SELECT *, (SELECT COUNT(*) from ${tableName} WHERE  name LIKE "%${keyword}%" ) as total FROM ${tableName} WHERE name LIKE "%${keyword}%" ORDER BY id ${orderby}`;
     }
     db.query(query, [offset, limit], (err, res) => {
         // console.log(q);
@@ -60,7 +67,7 @@ Class.create = (data, result) => {
     const q = `INSERT INTO ${tableName} SET ?`;
 
     db.query(q, [data], (err, res) => {
-        // console.log(err);
+        console.log(err);
         if (err) {
             result({ msg: ERROR }, null);
             return;
@@ -86,7 +93,7 @@ Class.updateById = (data, result) => {
             data.id,
         ],
         (err, res) => {
-            // console.log(err);
+            console.log(err);
             if (err) {
                 result({ msg: ERROR }, null);
                 return;
@@ -106,6 +113,7 @@ Class.updatePublishById = (id, publish, result) => {
     const q = `UPDATE ${tableName} SET publish = ? WHERE id = ?`;
 
     db.query(q, [publish, id], (err, res) => {
+        // console.log(err);
         if (err) {
             result({ msg: ERROR }, null);
             return;
