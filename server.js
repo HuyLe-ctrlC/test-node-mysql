@@ -62,5 +62,5 @@ require('./app/routes/wgs.route')(app);
 require('./app/routes/config.route')(app);
 require('./app/routes/cowCPass.route')(app);
 
-server.listen(port_name);
+server.listen(3000);
 console.log('server listen port ' + port_name);
