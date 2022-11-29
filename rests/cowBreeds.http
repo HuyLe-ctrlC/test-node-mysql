@@ -1,50 +1,51 @@
 //cow-breeds
 
 ###
-GET  http://localhost:3000/api/cow-breeds/getall?orderby=desc&search=ưdwd&limit=10
+GET  http://localhost:3001/api/cow-breeds/getall?keyword=&orderby=&search=&limit=10
 Content-Type: application/json
 
 ###
-GET  http://localhost:3000/api/cow-breeds/getbyid/8
+GET  http://localhost:3001/api/cow-breeds/getbyid/8
 Content-Type: application/json
 
 ###
-POST   http://localhost:3000/api/cow-breeds/create
+POST   http://localhost:3001/api/cow-breeds/create
 Content-Type: application/json
 
 {   
-    "code":"dsfsag",
-    "name":"duy khuong",
-    "publish":"1",
+    "code":"CB12",
+    "name":"Cow Breeds",
+    "publish":"0",
     "sort": "2"
 }
 
 ###
-PUT    http://localhost:3000/api/cow-breeds/update/8
+PUT http://localhost:3001/api/cow-breeds/update/16
 Content-Type: application/json
 
-{ "code":"sfsf",
-    "name":"ưdwd",
+{ 
+    "code":"CB",
+    "name":"Hayyo",
     "publish":"1",
     "sort": "2",
     "updated_at":""
 }
 
 ###
-PUT    http://localhost:3000/api/cow-breeds/update-publish/1
+PUT http://localhost:3001/api/cow-breeds/update-publish/1
 Content-Type: application/json
 
 {
-    "publish": ""
+    "publish": "1"
 }
 
 ###
-PUT    http://localhost:3000/api/cow-breeds/update-sort/8
+PUT http://localhost:3001/api/cow-breeds/update-sort/7
 Content-Type: application/json
 
 
 
 ###
-DELETE     http://localhost:3000/api/cow-breeds/delete/2
+DELETE http://localhost:3001/api/cow-breeds/delete/15
 
 

@@ -2,7 +2,7 @@ const constantNotify = {
     ACCESS_TOKEN: 'optech12345!@#',
     REFRESH_TOKEN: 'optech123456!@#',
     TOKEN_TIME_LIFE: '1h',
-    DEFAULT_LIMIT: 15,
+    DEFAULT_LIMIT: '',
     VALIDATE_BODY: 'không được để trống',
     ADD_DATA_SUCCESS: 'Thêm dữ liệu thành công',
     ADD_DATA_FAILED: 'Thêm dữ liệu thất bại',

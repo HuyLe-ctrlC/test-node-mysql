@@ -16,10 +16,15 @@ const CowBreeds = function (product) {
 
 //select data all
 CowBreeds.getAll = (dataSearch, limit, offset, orderby, result) => {
-    let query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName} ORDER BY id ${orderby} LIMIT ?,?`;
-    if (dataSearch.keyword) {
-        let keyword = dataSearch.keyword;
+    let query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName} ORDER BY id ${orderby}`;
+    let keyword = dataSearch.keyword;
+    if (limit) {
+        query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName} ORDER BY id ${orderby} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && limit) {
         query = `SELECT *, (SELECT COUNT(*) from ${tableName} WHERE code LIKE "%${keyword}%" OR  name LIKE "%${keyword}%" ) as total FROM ${tableName} WHERE code LIKE "%${keyword}%" OR name LIKE "%${keyword}%" ORDER BY id ${orderby} LIMIT ?,?`;
+    } else if (dataSearch.keyword && !limit) {
+        query = `SELECT *, (SELECT COUNT(*) from ${tableName} WHERE code LIKE "%${keyword}%" OR  name LIKE "%${keyword}%" ) as total FROM ${tableName} WHERE code LIKE "%${keyword}%" OR name LIKE "%${keyword}%" ORDER BY id ${orderby}`;
     }
     db.query(query, [offset, limit], (err, res) => {
         // console.log(q);
@@ -87,36 +92,19 @@ CowBreeds.create = (data, result) => {
 
 //update data by id
 CowBreeds.updateById = (data, result) => {
-    const q = `SELECT code FROM ${tableName} WHERE id = ?`;
-    db.query(q, [data.id], (err, res) => {
-        if (res && res.length === 0) {
-            result({ msg: 'ID ${NOT_EXITS}' }, null);
-            return;
-        }
+    const q = `UPDATE ${tableName} SET code = ?, name= ?, publish = ?, sort = ?, updated_at = ? WHERE id = ?`;
+
+    db.query(q, [data.code, data.name, data.publish, data.sort, data.updated_at, data.id], (err, res) => {
         if (err) {
             result({ msg: ERROR }, null);
             return;
         }
-        const code = data.code;
-
-        if (res[0].code === code) {
-            const q = `UPDATE ${tableName} SET code = ?, name= ?, publish = ?, sort = ?, updated_at = ? WHERE id = ?`;
-
-            db.query(q, [data.code, data.name, data.publish, data.sort, data.updated_at, data.id], (err, res) => {
-                if (err) {
-                    result({ msg: ERROR }, null);
-                    return;
-                }
-                if (res.affectedRows === 0) {
-                    //not found id
-                    result({ msg: `ID ${NOT_EXITS}` }, null);
-                    return;
-                }
-                result(null, res);
-            });
-        } else {
-            result({ msg: `Code ${NOT_EXITS}` }, null);
+        if (res.affectedRows === 0) {
+            //not found id
+            result({ msg: `ID ${NOT_EXITS}` }, null);
+            return;
         }
+        result(null, res);
     });
 };
 

@@ -1,14 +1,20 @@
 const { validationResult } = require('express-validator');
 const CowBreeds = require('../models/cowBreeds.model');
 const constants = require('../config/constants');
-
-const { ADD_DATA_SUCCESS, ADD_DATA_FAILED, UPDATE_DATA_SUCCESS, UPDATE_DATA_FAILED, DELETE_DATA_SUCCESS } =
-    constants.constantNotify;
+const db = require('../models/connectDB').promise();
+const {
+    ADD_DATA_SUCCESS,
+    ADD_DATA_FAILED,
+    UPDATE_DATA_SUCCESS,
+    UPDATE_DATA_FAILED,
+    DELETE_DATA_SUCCESS,
+    DEFAULT_LIMIT,
+} = constants.constantNotify;
 
 // get all data
 exports.findAll = (req, res) => {
     let dataSearch = {};
-    let limit = 15;
+    let limit = DEFAULT_LIMIT;
     let offset = 0;
     let orderby = 'asc';
     if (req.query) {
@@ -103,18 +109,25 @@ exports.create = async (req, res) => {
 };
 
 //update data
-exports.update = (req, res) => {
+exports.update = async (req, res, next) => {
     // validate Req
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.json({ result: false, errors: [errors] });
+    }
+    const [checkCode] = await db.execute('SELECT code FROM `tbl_cow_breeds` WHERE `code`=?', [req.body.code]);
+    if (checkCode.length !== 0) {
+        return res.status(422).json({
+            result: false,
+            data: { msg: 'Code đã tồn tại' },
+        });
     }
     try {
         const product = new CowBreeds({
             code: req.body.code,
             name: req.body.name,
             publish: !req.body.publish ? false : true,
-            sort: 0,
+            sort: req.params.id,
             updated_at: Date.now(),
             id: req.params.id,
         });
@@ -173,7 +186,7 @@ exports.updateSort = (req, res) => {
     }
     try {
         const id = req.params.id;
-        const sort = [req.body.sort];
+        const sort = req.params.id;
         CowBreeds.updateSortById(id, sort, (err, data) => {
             if (err) {
                 // console.log(err);
