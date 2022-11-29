@@ -163,7 +163,6 @@ exports.update = (req, res) => {
             cow_breek: req.body.cow_breek,
             farm: req.body.farm,
             gender: req.body.gender,
-            image: req.file.filename,
             birth_of_date: req.body.birth_of_date,
             pss: req.body.pss,
             age: req.body.age,
@@ -175,10 +174,17 @@ exports.update = (req, res) => {
             updated_at: Date.now(),
             id: req.params.id,
         });
+        const nameImage = req.files.map((file) => file.filename);
+        console.log(nameImage.length);
+        for (let index = nameImage.length; index < 6; index++) {
+            nameImage.push(null);
+        }
+        nameImage.push(Date.now());
+        console.log(nameImage[2]);
 
         //only create -> delete
         delete cPass.created_at;
-        CowCPass.updateById(cPass, (err, data) => {
+        CowCPass.updateById(nameImage, cPass, (err, data) => {
             if (err) {
                 res.send({ result: false, errors: [err] });
                 return;

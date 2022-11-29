@@ -11,7 +11,7 @@ module.exports = (app) => {
     //insert data
     router.post('/create', upload.array('image', 6), cowCPassController.create);
     //update data
-    router.put('/update/:id', upload.single('image'), cowCPassController.update);
+    router.put('/update/:id', upload.array('image', 6), cowCPassController.update);
     //update publish
     router.put('/update-publish/:id', cowCPassController.updatePublish);
     //

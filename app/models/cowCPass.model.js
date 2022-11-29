@@ -140,7 +140,7 @@ CowCPass.updateById = (data, result) => {
         console.log(res[0].cPass);
 
         if (res[0].cPass == cPass) {
-            const q = `UPDATE ${tableName} SET name= ?,card_number = ?,date_added = ?,cow_group = ?,cow_breek = ?, farm = ?, gender = ?, image = ?, birth_of_date = ?, pss = ?, age = ?, pnow = ?, conditions = ?, weight_gain_effect = ?, avg_weight_gain = ?, sort = ?, updated_at = ? WHERE id = ?`;
+            const q = `UPDATE ${tableName} SET name= ?,card_number = ?,date_added = ?,cow_group = ?,cow_breek = ?, farm = ?, gender = ?, birth_of_date = ?, pss = ?, age = ?, pnow = ?, conditions = ?, weight_gain_effect = ?, avg_weight_gain = ?, sort = ?, updated_at = ? WHERE id = ?`;
 
             db.query(
                 q,
@@ -152,7 +152,6 @@ CowCPass.updateById = (data, result) => {
                     data.cow_breek,
                     data.farm,
                     data.gender,
-                    data.image,
                     data.birth_of_date,
                     data.pss,
                     data.age,
