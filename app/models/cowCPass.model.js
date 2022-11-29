@@ -1,5 +1,6 @@
 const db = require('./connectDB');
 const tableName = 'tbl_cow_cpass';
+const tableNameImage = 'tbl_image';
 const constants = require('../config/constants');
 
 const { ERROR, ALREADY_EXITS, NOT_EXITS } = constants.constantNotify;
@@ -9,11 +10,11 @@ const CowCPass = function (cPass) {
     this.name = cPass.name;
     this.card_number = cPass.card_number;
     this.cPass = cPass.cPass;
+    this.date_added = cPass.date_added;
     this.cow_group = cPass.cow_group;
     this.cow_breek = cPass.cow_breek;
     this.farm = cPass.farm;
     this.gender = cPass.gender;
-    this.image = cPass.image;
     this.birth_of_date = cPass.birth_of_date;
     this.pss = cPass.pss;
     this.age = cPass.age;
@@ -77,11 +78,12 @@ CowCPass.findById = (id, result) => {
 };
 
 //create data
-CowCPass.create = (data, result) => {
+CowCPass.create = (nameImage, data, result) => {
+    console.log(123);
     const q = `SELECT cPass FROM ${tableName}`;
 
     db.query(q, (err, res) => {
-        console.log(err);
+        // console.log(err);
         if (err) {
             result({ msg: ERROR }, null);
             return;
@@ -89,20 +91,31 @@ CowCPass.create = (data, result) => {
         const cPassDb = res?.map((value, i) => {
             return value.cPass;
         });
-        const cPass = data.cPass;
-        // console.log('cPass:', typeof cPass);
-        // console.log('cPassDb:', typeof cPassDb);
-        if (!cPassDb.includes(parseInt(cPass))) {
+        const cPass = parseInt(data.cPass);
+        // console.log('cPass:', cPass);
+        // console.log('cPassDb:', cPassDb);
+        if (!cPassDb.includes(cPass)) {
             console.log(123);
-            const q = `INSERT INTO ${tableName} SET ?`;
-
-            db.query(q, [data], (err, res) => {
+            const query = `INSERT INTO ${tableNameImage} (name_image_one,name_image_two,name_image_three,name_image_four,name_image_five,name_image_six,updated_at) VALUE (?)`;
+            // const query = `SELECT * FROM ${tableNameImage}`;
+            db.query(query, [nameImage], (err, res) => {
+                console.log(query);
                 if (err) {
                     console.log(err);
                     result({ msg: ERROR }, null);
                     return;
                 }
-                result(null, { id: res.insertId });
+                const q = `INSERT INTO ${tableName} SET ?`;
+
+                db.query(q, [data], (err, res) => {
+                    console.log(err);
+                    if (err) {
+                        console.log(err);
+                        result({ msg: ERROR }, null);
+                        return;
+                    }
+                    result(null, { id: res.insertId });
+                });
             });
         } else {
             result({ msg: `cPass ${ALREADY_EXITS}` }, null);
@@ -127,13 +140,14 @@ CowCPass.updateById = (data, result) => {
         console.log(res[0].cPass);
 
         if (res[0].cPass == cPass) {
-            const q = `UPDATE ${tableName} SET name= ?,card_number = ?,cow_group = ?,cow_breek = ?, farm = ?, gender = ?, image = ?, birth_of_date = ?, pss = ?, age = ?, pnow = ?, conditions = ?, weight_gain_effect = ?, avg_weight_gain = ?, sort = ?, updated_at = ? WHERE id = ?`;
+            const q = `UPDATE ${tableName} SET name= ?,card_number = ?,date_added = ?,cow_group = ?,cow_breek = ?, farm = ?, gender = ?, image = ?, birth_of_date = ?, pss = ?, age = ?, pnow = ?, conditions = ?, weight_gain_effect = ?, avg_weight_gain = ?, sort = ?, updated_at = ? WHERE id = ?`;
 
             db.query(
                 q,
                 [
                     data.name,
                     data.card_number,
+                    data.date_added,
                     data.cow_group,
                     data.cow_breek,
                     data.farm,

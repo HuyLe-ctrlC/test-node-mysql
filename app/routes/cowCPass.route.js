@@ -9,7 +9,7 @@ module.exports = (app) => {
     //all data by id
     router.get('/getbyid/:id', cowCPassController.findById);
     //insert data
-    router.post('/create', upload.array('image', 10), cowCPassController.create);
+    router.post('/create', upload.array('image', 6), cowCPassController.create);
     //update data
     router.put('/update/:id', upload.single('image'), cowCPassController.update);
     //update publish

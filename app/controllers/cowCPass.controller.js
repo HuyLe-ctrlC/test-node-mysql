@@ -68,23 +68,25 @@ exports.create = async (req, res) => {
             .resize(200, 200)
             .toFile(`./uploads/image/thumb/${file.filename}`, function (err) {
                 if (err) {
+                    console.log(err);
                     res.send({ result: false, errors: [err] });
                     return;
                 }
             });
     });
-    // console.log('ok okoko');
+    console.log('ok okoko');
     try {
+        console.log(req.body);
         //req from client
         const cPass = new CowCPass({
             name: req.body.name,
             card_number: req.body.card_number,
             cPass: req.body.cPass,
+            date_added: req.body.date_added,
             cow_group: req.body.cow_group,
             cow_breek: req.body.cow_breek,
             farm: req.body.farm,
             gender: req.body.gender,
-            image: req.files.map((file) => file.originalname),
             birth_of_date: req.body.birth_of_date,
             pss: req.body.pss,
             age: req.body.age,
@@ -95,11 +97,17 @@ exports.create = async (req, res) => {
             sort: 0,
             created_at: Date.now(),
         });
-        console.log(cPass.image);
+        const nameImage = req.files.map((file) => file.filename);
+        console.log(nameImage.length);
+        for (let index = nameImage.length; index < 6; index++) {
+            nameImage.push(null);
+        }
+        nameImage.push(Date.now());
+        console.log(nameImage[2]);
 
         //only update -> delete
         delete cPass.updated_at;
-        CowCPass.create(cPass, (err, data) => {
+        CowCPass.create(nameImage, cPass, (err, data) => {
             if (err) {
                 res.send({
                     result: false,
@@ -120,6 +128,7 @@ exports.create = async (req, res) => {
             });
         });
     } catch (error) {
+        console.log(error);
         res.send({
             result: false,
             errors: [{ mess: ADD_DATA_FAILED }],
@@ -149,6 +158,7 @@ exports.update = (req, res) => {
             name: req.body.name,
             card_number: req.body.card_number,
             cPass: req.body.cPass,
+            date_added: req.body.date_added,
             cow_group: req.body.cow_group,
             cow_breek: req.body.cow_breek,
             farm: req.body.farm,
