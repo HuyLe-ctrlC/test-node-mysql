@@ -1,7 +1,8 @@
 const { validationResult } = require('express-validator');
-const Products = require('../models/products.model');
-// const sharp = require('sharp');
+const sharp = require('sharp');
+const fs = require('fs');
 const constants = require('../config/constants');
+const CowCPass = require('../models/cowCPass.model');
 const {
     DEFAULT_LIMIT,
     ADD_DATA_SUCCESS,
@@ -23,7 +24,7 @@ exports.findAll = (req, res) => {
         limit = parseInt(req.query.limit);
     }
     // console.log(dataSearch);
-    Products.getAll(dataSearch, limit, (err, data) => {
+    CowCPass.getAll(dataSearch, limit, (err, data) => {
         if (err) {
             res.send({ result: false, msg: err });
         } else {
@@ -39,7 +40,7 @@ exports.findAll = (req, res) => {
 //get all data by id
 exports.findById = (req, res) => {
     const id = req.params.id;
-    Products.findById(id, (err, data) => {
+    CowCPass.findById(id, (err, data) => {
         if (err) {
             res.send({
                 result: false,
@@ -61,32 +62,44 @@ exports.create = async (req, res) => {
     if (!errors.isEmpty()) {
         return res.json({ result: false, errors: errors.array() });
     }
-    // console.log(req.file);
-    // sharp(req && req.file && req.file.path) //path file image
-    //     .resize(200, 200)
-    //     .toFile(`./uploads/image/thumb/${req.file.filename}`, function (err) {
-    //         if (err) {
-    //             res.send({ result: false, errors: [err] });
-    //             return;
-    //         }
+    console.log(req.files);
+    req?.files?.map((file) => {
+        return sharp(file.path) //path file image
+            .resize(200, 200)
+            .toFile(`./uploads/image/thumb/${file.filename}`, function (err) {
+                if (err) {
+                    res.send({ result: false, errors: [err] });
+                    return;
+                }
+            });
+    });
     // console.log('ok okoko');
     try {
         //req from client
-        const product = new Products({
-            code: req.body.code,
+        const cPass = new CowCPass({
             name: req.body.name,
-            image: req.file.originalname,
-            thumb: req.file.filename,
-            price: req.body.price,
-            publish: !req.body.publish ? false : true,
+            card_number: req.body.card_number,
+            cPass: req.body.cPass,
+            cow_group: req.body.cow_group,
+            cow_breek: req.body.cow_breek,
+            farm: req.body.farm,
+            gender: req.body.gender,
+            image: req.files.map((file) => file.originalname),
+            birth_of_date: req.body.birth_of_date,
+            pss: req.body.pss,
+            age: req.body.age,
+            pnow: req.body.pnow,
+            conditions: req.body.conditions,
+            weight_gain_effect: req.body.weight_gain_effect,
+            avg_weight_gain: req.body.avg_weight_gain,
             sort: 0,
             created_at: Date.now(),
         });
-        // console.log(product);
+        console.log(cPass.image);
 
         //only update -> delete
-        delete product.updated_at;
-        Products.create(product, (err, data) => {
+        delete cPass.updated_at;
+        CowCPass.create(cPass, (err, data) => {
             if (err) {
                 res.send({
                     result: false,
@@ -94,14 +107,14 @@ exports.create = async (req, res) => {
                 });
                 return;
             }
-            product.id = data.id;
+            cPass.id = data.id;
             res.send({
                 result: true,
                 data: [
                     {
                         msg: ADD_DATA_SUCCESS,
                         insertId: data.id,
-                        newData: product,
+                        newData: cPass,
                     },
                 ],
             });
@@ -122,42 +135,52 @@ exports.update = (req, res) => {
     if (!errors.isEmpty()) {
         return res.json({ result: false, errors: [errors] });
     }
-    // sharp(req && req.file && req.file.path)
-    //     .resize(200, 200)
-    //     .toFile(`./uploads/image/thumb/${req.file.filename}`, function (err) {
-    //         if (err) {
-    //             res.send({ result: false, errors: [err] });
-    //             return;
-    //         }
+    sharp(req && req.file && req.file.path)
+        .resize(200, 200)
+        .toFile(`./uploads/image/thumb/${req.file.filename}`, function (err) {
+            if (err) {
+                res.send({ result: false, errors: [err] });
+                return;
+            }
+        });
     // console.log('successfully');
     try {
-        const product = new Products({
-            code: req.body.code,
+        const cPass = new CowCPass({
             name: req.body.name,
-            image: req.file.originalname,
-            thumb: req.file.filename,
-            price: req.body.price,
-            publish: !req.body.publish ? false : true,
+            card_number: req.body.card_number,
+            cPass: req.body.cPass,
+            cow_group: req.body.cow_group,
+            cow_breek: req.body.cow_breek,
+            farm: req.body.farm,
+            gender: req.body.gender,
+            image: req.file.filename,
+            birth_of_date: req.body.birth_of_date,
+            pss: req.body.pss,
+            age: req.body.age,
+            pnow: req.body.pnow,
+            conditions: req.body.conditions,
+            weight_gain_effect: req.body.weight_gain_effect,
+            avg_weight_gain: req.body.avg_weight_gain,
             sort: 0,
             updated_at: Date.now(),
             id: req.params.id,
         });
 
         //only create -> delete
-        delete product.created_at;
-        Products.updateById(product, (err, data) => {
+        delete cPass.created_at;
+        CowCPass.updateById(cPass, (err, data) => {
             if (err) {
                 res.send({ result: false, errors: [err] });
                 return;
             }
-            product.id = req.params.id;
-            product.created_at = 0;
+            cPass.id = req.params.id;
+            cPass.created_at = 0;
             res.send({
                 result: true,
                 data: [
                     {
                         msg: UPDATE_DATA_SUCCESS,
-                        newData: product,
+                        newData: cPass,
                     },
                 ],
             });
@@ -177,7 +200,7 @@ exports.updatePublish = (req, res) => {
     try {
         const id = req.params.id;
         const publish = [req.body.publish];
-        Products.updatePublishById(id, publish, (err, data) => {
+        CowCPass.updatePublishById(id, publish, (err, data) => {
             if (err) {
                 // console.log(err);
                 res.send({ result: false, errors: [err] });
@@ -199,7 +222,7 @@ exports.updateSort = (req, res) => {
     try {
         const id = req.params.id;
         const sort = [req.body.sort];
-        Products.updateSortById(id, sort, (err, data) => {
+        CowCPass.updateSortById(id, sort, (err, data) => {
             if (err) {
                 // console.log(err);
                 res.send({ result: false, errors: [err] });
@@ -215,7 +238,7 @@ exports.updateSort = (req, res) => {
 //delete data
 exports.delete = (req, res) => {
     const id = req.params.id;
-    Products.remove(id, (err, data) => {
+    CowCPass.remove(id, (err, data) => {
         if (err) {
             res.send({ result: false, errors: [err] });
             return;
