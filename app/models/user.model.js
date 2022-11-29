@@ -1,6 +1,7 @@
 const db = require('./connectDB');
 const tableName = 'tbl_users';
 const constants = require('../config/constants');
+const bcrypt = require('bcryptjs');
 
 const { ERROR, ALREADY_EXITS, NOT_EXITS } = constants.constantNotify;
 
@@ -28,11 +29,19 @@ User.getAll = (dataSearch, limit, result) => {
     if (dataSearch.orderby) {
         orderBy = dataSearch.orderby;
     }
-    let query = `SELECT *, (SELECT COUNT(*) FROM ${tableName}) as total FROM ${tableName} ORDER BY id ${orderBy} LIMIT ?,?`;
-    if (dataSearch.keyword) {
+    let query = `SELECT *, (SELECT COUNT(*) FROM ${tableName}) as total FROM ${tableName} ORDER BY id ${orderBy}`;
+    if (limit) {
+        query = `SELECT *, (SELECT COUNT(*) FROM ${tableName}) as total FROM ${tableName} ORDER BY id ${orderBy} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && limit) {
         keyword = dataSearch.keyword;
         like = `WHERE fullname LIKE "%${keyword}%"`;
         query = `SELECT *, (SELECT COUNT(*) FROM ${tableName} ${like}) as total FROM ${tableName} ${like} ORDER BY id ${orderBy} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && !limit) {
+        keyword = dataSearch.keyword;
+        like = `WHERE fullname LIKE "%${keyword}%"`;
+        query = `SELECT *, (SELECT COUNT(*) FROM ${tableName} ${like}) as total FROM ${tableName} ${like} ORDER BY id ${orderBy}`;
     }
 
     db.query(query, [offset, limit], (err, res) => {
@@ -56,18 +65,6 @@ User.findById = (id, result) => {
         }
         // console.log("found todo: ", res[0]);
         result(null, res[0]);
-    });
-};
-
-// insert db
-User.register = (newsData, result) => {
-    db.query(`INSERT INTO ${tableName} SET ?`, newsData, function (err, res) {
-        if (err) {
-            // console.log('error', err);
-            result(err, null);
-            return;
-        }
-        result(null, { id: res.insertId });
     });
 };
 

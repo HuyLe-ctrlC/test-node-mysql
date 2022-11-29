@@ -1,8 +1,8 @@
 const constantNotify = {
     ACCESS_TOKEN: 'optech12345!@#',
     REFRESH_TOKEN: 'optech123456!@#',
-    TOKEN_TIME_LIFE: '1h',
-    DEFAULT_LIMIT: 15,
+    TOKEN_TIME_LIFE: '30s',
+    DEFAULT_LIMIT: '',
     VALIDATE_BODY: 'không được để trống',
     ADD_DATA_SUCCESS: 'Thêm dữ liệu thành công',
     ADD_DATA_FAILED: 'Thêm dữ liệu thất bại',
@@ -12,6 +12,10 @@ const constantNotify = {
     ERROR: 'Đã xãy ra lỗi',
     ALREADY_EXITS: 'đã tồn tại',
     NOT_EXITS: 'không tồn tại',
+    OBTAIN: 'Đã bán',
+    NOT_OBTAIN: 'Chưa bán',
+    COMPLETE: 'Đã thanh toán',
+    NOT_COMPLETE: 'Chưa thanh toán',
 };
 
 module.exports = {

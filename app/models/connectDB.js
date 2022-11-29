@@ -4,11 +4,12 @@ var connection = mysql.createConnection({
     host: dbConfig.HOST,
     user: dbConfig.USER,
     password: dbConfig.PASSWORD,
-    database: dbConfig.DATABASE
+    database: dbConfig.DATABASE,
 });
 
-connection.connect(error => {
-    if(error){
+connection.connect((error) => {
+    if (error) {
+        console.log(error);
         console.log('Unable to connect to database. Please check again.');
         return;
     }

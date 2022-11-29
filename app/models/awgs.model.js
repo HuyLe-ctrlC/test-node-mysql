@@ -17,10 +17,17 @@ const Awgs = function (awgs) {
 
 // select data all
 Awgs.getAll = (dataSearch, limit, offset, orderby, result) => {
-    let query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName} ORDER BY id ${orderby} LIMIT ?,?`;
-    if (dataSearch.keyword) {
+    let query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName} ORDER BY id ${orderby}`;
+    if (limit) {
+        query = `SELECT *, (SELECT COUNT(*) from ${tableName}) as total FROM ${tableName} ORDER BY id ${orderby} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && limit) {
         let keyword = dataSearch.keyword;
         query = `SELECT *, (SELECT COUNT(*) from ${tableName} WHERE code LIKE "%${keyword}%" OR  name LIKE "%${keyword}%" ) as total FROM ${tableName} WHERE code LIKE "%${keyword}%" OR name LIKE "%${keyword}%" ORDER BY id ${orderby} LIMIT ?,?`;
+    }
+    if (dataSearch.keyword && !limit) {
+        let keyword = dataSearch.keyword;
+        query = `SELECT *, (SELECT COUNT(*) from ${tableName} WHERE code LIKE "%${keyword}%" OR  name LIKE "%${keyword}%" ) as total FROM ${tableName} WHERE code LIKE "%${keyword}%" OR name LIKE "%${keyword}%" ORDER BY id ${orderby}`;
     }
     db.query(query, [offset, limit], (err, res) => {
         // console.log(q);

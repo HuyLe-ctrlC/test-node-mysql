@@ -38,14 +38,6 @@ module.exports = (app) => {
         AdminsController.login,
     );
     router.get('/refreshToken', AdminsController.refreshToken);
-    router.put(
-        '/changePassword/:id',
-        [
-            body('passwordCurrent', 'The name not empty').notEmpty().trim(),
-            body('passwordNew', 'The username not empty').notEmpty().trim(),
-        ],
-        AdminsController.updatePassword,
-    );
 
     app.use('/api/admins', router);
 };
